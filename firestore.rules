@@ -1,0 +1,26 @@
+rules_version = '2';
+
+// users/{uid}                 public profile (nickname, score…) used by the ranking
+// users/{uid}/solved/{plate}  plates solved by the player (private)
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isOwner(uid) { return signedIn() && request.auth.uid == uid; }
+
+    match /users/{uid} {
+      // Any signed-in player can read profiles (ranking).
+      allow read: if signedIn();
+      allow create, update: if isOwner(uid)
+        && (!('nickname' in request.resource.data)
+            || (request.resource.data.nickname is string
+                && request.resource.data.nickname.size() <= 24))
+        && (!('score' in request.resource.data)
+            || request.resource.data.score is int);
+      allow delete: if false;
+
+      match /solved/{plateId} {
+        allow read, write: if isOwner(uid);
+      }
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "781418960314",
+    "project_id": "mathing-of-the-dead",
+    "storage_bucket": "mathing-of-the-dead.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:781418960314:android:917bd66c40815a990af983",
+        "android_client_info": {
+          "package_name": "br.ufscar.mathingdead.mathing_of_the_dead"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "781418960314-a79e132ussq2po0eh5e79jinhasg9r1n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYeq1Y0ZlMmSKFmH-m4M2G-4Xn3_OZ8TQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "781418960314-a79e132ussq2po0eh5e79jinhasg9r1n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
