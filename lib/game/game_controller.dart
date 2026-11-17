@@ -12,6 +12,7 @@ import 'engine/ast.dart';
 import 'engine/difficulty.dart';
 import 'engine/parser.dart';
 import 'engine/tokens.dart';
+import 'engine/unsolvable_plates.dart';
 
 const maxLives = 3;
 
@@ -153,7 +154,9 @@ class GameController extends Notifier<GameState?> {
     _solved = {...solved};
     _uid = uid;
     final restored = _restore(level);
-    if (restored != null && !_solved.contains(restored.plate)) {
+    if (restored != null &&
+        !_solved.contains(restored.plate) &&
+        !unsolvablePlates(level).contains(restored.plate)) {
       state = restored;
       _progress = restored.initialProgress;
       return;
@@ -162,7 +165,7 @@ class GameController extends Notifier<GameState?> {
   }
 
   GameState _fresh(Difficulty level, {int serial = 0}) {
-    final plate = _pickPlate(exclude: null);
+    final plate = _pickPlate(level);
     return GameState(
       level: level,
       plate: plate ?? '0000',
@@ -173,21 +176,34 @@ class GameController extends Notifier<GameState?> {
     );
   }
 
-  String? _pickPlate({String? exclude}) {
-    if (_solved.length >= 10000) return null;
-    final blocked = {..._solved, ..._skipped, ?exclude};
-    if (blocked.length >= 10000) {
+  /// A random plate the player has not solved yet and that has a solution
+  /// at [level] (impossible plates are never dealt). Null when every
+  /// solvable plate of the level is solved.
+  String? _pickPlate(Difficulty level, {String? exclude}) {
+    final impossible = unsolvablePlates(level);
+    final candidates = [
+      for (var i = 0; i < 10000; i++)
+        if (!impossible.contains(_code(i)) && !_solved.contains(_code(i)))
+          _code(i),
+    ];
+    if (candidates.isEmpty) return null;
+    var open = [
+      for (final p in candidates)
+        if (p != exclude && !_skipped.contains(p)) p,
+    ];
+    if (open.isEmpty) {
       // Every unsolved plate was skipped: let skipped ones come back.
       _skipped.clear();
-      blocked
-        ..clear()
-        ..addAll({..._solved, ?exclude});
+      open = [
+        for (final p in candidates)
+          if (p != exclude) p,
+      ];
     }
-    while (true) {
-      final candidate = _random.nextInt(10000).toString().padLeft(4, '0');
-      if (!blocked.contains(candidate)) return candidate;
-    }
+    if (open.isEmpty) return exclude; // only the current plate is left
+    return open[_random.nextInt(open.length)];
   }
+
+  static String _code(int i) => i.toString().padLeft(4, '0');
 
   /// The four digits with the "=" already loaded in the middle: the equals
   /// sign is always needed, so the player starts with it in place (and can
@@ -401,7 +417,7 @@ class GameController extends Notifier<GameState?> {
     _solved.add(s.plate);
     final streak = s.streak + 1;
     _persistSolve(record, streak);
-    final next = _pickPlate(exclude: s.plate);
+    final next = _pickPlate(s.level, exclude: s.plate);
     state = s.copyWith(
       plate: next ?? s.plate,
       tokens: next == null ? const [] : _initialTokens(next),
@@ -453,12 +469,13 @@ class GameController extends Notifier<GameState?> {
     _save();
   }
 
-  /// The player gives up on this plate: a new zombie appears (no penalty
-  /// besides losing the streak).
+  /// The player gives up on this plate: the same zombie keeps walking with a
+  /// new plate, so skipping costs the time already spent (spamming "Skip" is
+  /// not a free escape). The streak is lost.
   void skip() {
     if (state == null || _s.gameOver) return;
     _skipped.add(_s.plate);
-    _nextPlate(event: SkipEvent(), streak: 0);
+    _nextPlate(event: SkipEvent(), streak: 0, progress: _progress);
   }
 
   /// The zombie reached the player.
@@ -486,9 +503,13 @@ class GameController extends Notifier<GameState?> {
     _nextPlate(event: event, streak: 0);
   }
 
-  void _nextPlate({required GameEvent event, required int streak}) {
+  void _nextPlate({
+    required GameEvent event,
+    required int streak,
+    double progress = 0,
+  }) {
     final s = _s;
-    final next = _pickPlate(exclude: s.plate);
+    final next = _pickPlate(s.level, exclude: s.plate);
     state = s.copyWith(
       plate: next ?? s.plate,
       tokens: next == null ? const [] : _initialTokens(next),
@@ -499,9 +520,9 @@ class GameController extends Notifier<GameState?> {
       clearError: true,
       allSolved: next == null,
       event: event,
-      initialProgress: 0,
+      initialProgress: progress,
     );
-    _progress = 0;
+    _progress = progress;
     _save();
   }
 

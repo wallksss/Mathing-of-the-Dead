@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -121,7 +121,13 @@ class _ZombieSceneState extends State<ZombieScene>
       ..death = 0
       ..plate = widget.plate
       ..seed = widget.plateSerial
-      ..progress = widget.walkDuration == null ? 0.25 : widget.initialProgress;
+      ..progress = widget.walkDuration == null
+          ? 0.25
+          // A positive initialProgress means the same zombie keeps walking
+          // (skip); the reported value lags up to 1 s, so never step back.
+          : widget.initialProgress > 0
+          ? math.max(widget.initialProgress, _clock.progress)
+          : 0;
   }
 
   void _onTick(Duration elapsed) {

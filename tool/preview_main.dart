@@ -2,7 +2,7 @@
 // Firebase Auth and Firestore so the UI can be previewed without a Firebase
 // project.  flutter run -d chrome -t tool/preview_main.dart
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mathing_of_the_dead/app.dart';
 import 'package:mathing_of_the_dead/core/prefs.dart';

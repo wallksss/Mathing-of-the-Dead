@@ -2,8 +2,8 @@
 abstract final class AppConfig {
   /// Group members, shown on the login page.
   static const groupMembers = <String>[
-    'Integrante 1 — Anderson Cristiano Sassaki Gonçalves',
-    'Integrante 2 — Pedro Henrique Benetton Comisso',
+    'Anderson Cristiano Sassaki Gonçalves',
+    'Pedro Henrique Benetton Comisso',
   ];
 
   /// OAuth "Web client ID" of the Firebase project (Firebase console →

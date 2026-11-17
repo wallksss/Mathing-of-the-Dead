@@ -20,6 +20,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get developedBy => 'Developed by';
 
   @override
+  String groupMember(int index, String name) {
+    return 'Member $index — $name';
+  }
+
+  @override
   String get professorCredit => 'Based on Emplake, by Prof. Walter Carnielli';
 
   @override
@@ -91,7 +96,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get helpScoreBody =>
-      'Harder levels are worth more points. Answering fast and keeping a streak gives bonuses. A hint costs 75% of the plate’s points. You can skip a plate at any time, and a plate you solved never appears again at that level.';
+      'Harder levels are worth more points. Answering fast and keeping a streak gives bonuses. A hint costs 75% of the plate’s points. You can skip a plate at any time, but the zombie keeps coming from where it was, and a plate you solved never appears again at that level.';
 
   @override
   String get close => 'Close';

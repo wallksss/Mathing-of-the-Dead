@@ -20,6 +20,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String get developedBy => 'Desarrollado por';
 
   @override
+  String groupMember(int index, String name) {
+    return 'Integrante $index — $name';
+  }
+
+  @override
   String get professorCredit => 'Basado en Emplake, del Prof. Walter Carnielli';
 
   @override
@@ -91,7 +96,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get helpScoreBody =>
-      'Los niveles más difíciles valen más puntos. Responder rápido y mantener una racha da bonificaciones. Una pista cuesta el 75% de los puntos de la matrícula. Puedes saltar una matrícula en cualquier momento, y una matrícula resuelta nunca vuelve a aparecer en ese nivel.';
+      'Los niveles más difíciles valen más puntos. Responder rápido y mantener una racha da bonificaciones. Una pista cuesta el 75% de los puntos de la matrícula. Puedes saltar una matrícula en cualquier momento, pero el zombi sigue desde donde estaba, y una matrícula resuelta nunca vuelve a aparecer en ese nivel.';
 
   @override
   String get close => 'Cerrar';

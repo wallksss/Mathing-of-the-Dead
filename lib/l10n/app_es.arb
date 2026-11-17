@@ -3,6 +3,7 @@
   "appTitle": "Mathing of the Dead",
   "tagline": "Convierte la matrícula de cada zombi en una igualdad verdadera antes de que te alcance.",
   "developedBy": "Desarrollado por",
+  "groupMember": "Integrante {index} — {name}",
   "professorCredit": "Basado en Emplake, del Prof. Walter Carnielli",
   "language": "Idioma",
   "languageName": "Español",
@@ -26,7 +27,7 @@
   "helpLevelsTitle": "Niveles",
   "helpLevelsBody": "Fácil tiene todos los operadores y es el único nivel que acepta divisiones no enteras como 5/2. Intermedio quita piso y techo, Avanzado también quita la potencia y la raíz cúbica, y Difícil solo conserva + - × ÷, paréntesis y el valor absoluto.",
   "helpScoreTitle": "Puntuación",
-  "helpScoreBody": "Los niveles más difíciles valen más puntos. Responder rápido y mantener una racha da bonificaciones. Una pista cuesta el 75% de los puntos de la matrícula. Puedes saltar una matrícula en cualquier momento, y una matrícula resuelta nunca vuelve a aparecer en ese nivel.",
+  "helpScoreBody": "Los niveles más difíciles valen más puntos. Responder rápido y mantener una racha da bonificaciones. Una pista cuesta el 75% de los puntos de la matrícula. Puedes saltar una matrícula en cualquier momento, pero el zombi sigue desde donde estaba, y una matrícula resuelta nunca vuelve a aparecer en ese nivel.",
   "close": "Cerrar",
 
   "chooseBattle": "Elige tu batalla",

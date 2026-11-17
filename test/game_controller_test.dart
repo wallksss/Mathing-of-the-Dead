@@ -5,6 +5,7 @@ import 'package:mathing_of_the_dead/core/prefs.dart';
 import 'package:mathing_of_the_dead/data/models.dart';
 import 'package:mathing_of_the_dead/data/user_repository.dart';
 import 'package:mathing_of_the_dead/game/engine/difficulty.dart';
+import 'package:mathing_of_the_dead/game/engine/unsolvable_plates.dart';
 import 'package:mathing_of_the_dead/game/engine/tokens.dart';
 import 'package:mathing_of_the_dead/game/game_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -116,10 +117,10 @@ void main() {
   });
 
   test('operators of other levels are rejected', () {
-    startWith('9311', Difficulty.hard);
+    startWith('1234', Difficulty.hard); // -1+2+3=4
     c().type('s');
     expect(s().event, isA<InvalidKeyEvent>());
-    expect(plain(s()), '9311');
+    expect(plain(s()), '1234');
   });
 
   test('backspace removes operators but never digits', () {
@@ -155,6 +156,16 @@ void main() {
     expect(repo.runs, 1);
   });
 
+  test('skip keeps the zombie where it is; a hit brings a fresh one', () {
+    startWith('1234', Difficulty.easy);
+    c().reportProgress(0.6);
+    c().skip();
+    expect(s().initialProgress, 0.6);
+    c().reportProgress(0.7);
+    c().zombieArrived();
+    expect(s().initialProgress, 0);
+  });
+
   test('solved plates are never offered again', () {
     final solved = {
       for (var i = 0; i < 10000; i++)
@@ -162,6 +173,33 @@ void main() {
     };
     c().start(Difficulty.hard, solved, 'u1');
     expect(s().plate, '0042');
+  });
+
+  test('plates with no solution at the level are never dealt', () {
+    expect(unsolvablePlates(Difficulty.hard), contains('0124'));
+    final solved = {
+      for (var i = 0; i < 10000; i++)
+        if (i != 42 && i != 124) i.toString().padLeft(4, '0'),
+    };
+    c().start(Difficulty.hard, solved, 'u1');
+    expect(s().plate, '0042');
+    expect(s().allSolved, isFalse);
+  });
+
+  test('every solvable plate solved ends the level', () {
+    final solved = {
+      for (var i = 0; i < 10000; i++) i.toString().padLeft(4, '0'),
+    }..removeAll(unsolvablePlates(Difficulty.hard));
+    c().start(Difficulty.hard, solved, 'u1');
+    expect(s().allSolved, isTrue);
+  });
+
+  test('the generated lists match known plates', () {
+    expect(unsolvablePlates(Difficulty.easy), isEmpty);
+    expect(unsolvablePlates(Difficulty.intermediate), contains('7555'));
+    expect(unsolvablePlates(Difficulty.advanced), contains('1567'));
+    // 8131 has √(8+1) = 3**1 at Intermediate.
+    expect(unsolvablePlates(Difficulty.intermediate), isNot(contains('8131')));
   });
 
   test('game is saved per user and restored', () {

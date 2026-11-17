@@ -3,6 +3,8 @@
   "appTitle": "Mathing of the Dead",
   "tagline": "Turn each zombie’s licence plate into a true equation before it reaches you.",
   "developedBy": "Developed by",
+  "groupMember": "Member {index} — {name}",
+  "@groupMember": {"placeholders": {"index": {"type": "int"}, "name": {"type": "String"}}},
   "professorCredit": "Based on Emplake, by Prof. Walter Carnielli",
   "language": "Language",
   "languageName": "English",
@@ -27,7 +29,7 @@
   "helpLevelsTitle": "Levels",
   "helpLevelsBody": "Easy has every operator and is the only level that accepts non-integer divisions such as 5/2. Intermediate drops floor and ceiling, Advanced also drops powers and the cube root, and Hard only keeps + - × ÷, parentheses and the absolute value.",
   "helpScoreTitle": "Score",
-  "helpScoreBody": "Harder levels are worth more points. Answering fast and keeping a streak gives bonuses. A hint costs 75% of the plate’s points. You can skip a plate at any time, and a plate you solved never appears again at that level.",
+  "helpScoreBody": "Harder levels are worth more points. Answering fast and keeping a streak gives bonuses. A hint costs 75% of the plate’s points. You can skip a plate at any time, but the zombie keeps coming from where it was, and a plate you solved never appears again at that level.",
   "close": "Close",
 
   "chooseBattle": "Choose your battle",

@@ -20,6 +20,11 @@ class AppLocalizationsPt extends AppLocalizations {
   String get developedBy => 'Desenvolvido por';
 
   @override
+  String groupMember(int index, String name) {
+    return 'Integrante $index — $name';
+  }
+
+  @override
   String get professorCredit => 'Baseado no Emplake, do Prof. Walter Carnielli';
 
   @override
@@ -91,7 +96,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get helpScoreBody =>
-      'Níveis mais difíceis valem mais pontos. Responder rápido e manter uma sequência dá bônus. Uma dica custa 75% dos pontos da placa. Você pode pular uma placa a qualquer momento, e uma placa resolvida nunca aparece de novo naquele nível.';
+      'Níveis mais difíceis valem mais pontos. Responder rápido e manter uma sequência dá bônus. Uma dica custa 75% dos pontos da placa. Você pode pular uma placa a qualquer momento, mas o zumbi continua de onde estava, e uma placa resolvida nunca aparece de novo naquele nível.';
 
   @override
   String get close => 'Fechar';

@@ -1,20 +1,26 @@
 import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:material_ui/material_ui.dart';
+// firebase_ui_auth still uses package:flutter/material widgets, which look up
+// the legacy Material/Cupertino localizations; register both sets until it
+// migrates to material_ui.
+import 'package:flutter_localizations/flutter_localizations.dart'
+    as legacy
+    show GlobalCupertinoLocalizations, GlobalMaterialLocalizations;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'l10n/generated/app_localizations.dart';
 import 'routing/router.dart';
 import 'settings/app_settings.dart';
 import 'theme/app_theme.dart';
+import 'theme/legacy_theme.dart';
 import 'widgets/common.dart';
 
 const _localizationsDelegates = <LocalizationsDelegate<dynamic>>[
   AppLocalizations.delegate,
   FirebaseUILocalizations.delegate,
-  GlobalMaterialLocalizations.delegate,
-  GlobalWidgetsLocalizations.delegate,
-  GlobalCupertinoLocalizations.delegate,
+  ...GlobalMaterialLocalizations.delegates,
+  legacy.GlobalMaterialLocalizations.delegate,
+  legacy.GlobalCupertinoLocalizations.delegate,
 ];
 
 /// Applies the font size chosen in the settings to the whole app.
@@ -43,7 +49,10 @@ class MathingApp extends ConsumerWidget {
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: _localizationsDelegates,
       routerConfig: router,
-      builder: (context, child) => _scaled(context, child, settings.textScale),
+      builder: (context, child) => LegacyThemeBridge(
+        settings: settings,
+        child: _scaled(context, child, settings.textScale),
+      ),
     );
   }
 }
@@ -66,7 +75,10 @@ class FirebaseSetupApp extends ConsumerWidget {
       locale: settings.locale,
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: _localizationsDelegates,
-      builder: (context, child) => _scaled(context, child, settings.textScale),
+      builder: (context, child) => LegacyThemeBridge(
+        settings: settings,
+        child: _scaled(context, child, settings.textScale),
+      ),
       home: Builder(
         builder: (context) {
           final l = AppLocalizations.of(context);

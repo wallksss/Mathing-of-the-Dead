@@ -118,6 +118,12 @@ abstract class AppLocalizations {
   /// **'Developed by'**
   String get developedBy;
 
+  /// No description provided for @groupMember.
+  ///
+  /// In en, this message translates to:
+  /// **'Member {index} — {name}'**
+  String groupMember(int index, String name);
+
   /// No description provided for @professorCredit.
   ///
   /// In en, this message translates to:
@@ -247,7 +253,7 @@ abstract class AppLocalizations {
   /// No description provided for @helpScoreBody.
   ///
   /// In en, this message translates to:
-  /// **'Harder levels are worth more points. Answering fast and keeping a streak gives bonuses. A hint costs 75% of the plate’s points. You can skip a plate at any time, and a plate you solved never appears again at that level.'**
+  /// **'Harder levels are worth more points. Answering fast and keeping a streak gives bonuses. A hint costs 75% of the plate’s points. You can skip a plate at any time, but the zombie keeps coming from where it was, and a plate you solved never appears again at that level.'**
   String get helpScoreBody;
 
   /// No description provided for @close.

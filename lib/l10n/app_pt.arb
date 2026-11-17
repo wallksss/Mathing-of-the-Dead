@@ -3,6 +3,7 @@
   "appTitle": "Mathing of the Dead",
   "tagline": "Transforme a placa de cada zumbi em uma igualdade verdadeira antes que ele chegue até você.",
   "developedBy": "Desenvolvido por",
+  "groupMember": "Integrante {index} — {name}",
   "professorCredit": "Baseado no Emplake, do Prof. Walter Carnielli",
   "language": "Idioma",
   "languageName": "Português",
@@ -26,7 +27,7 @@
   "helpLevelsTitle": "Níveis",
   "helpLevelsBody": "O Fácil tem todos os operadores e é o único nível que aceita divisões não inteiras, como 5/2. O Intermediário remove base e teto, o Avançado também remove potência e raiz cúbica, e o Difícil mantém apenas + - × ÷, parênteses e o módulo.",
   "helpScoreTitle": "Pontuação",
-  "helpScoreBody": "Níveis mais difíceis valem mais pontos. Responder rápido e manter uma sequência dá bônus. Uma dica custa 75% dos pontos da placa. Você pode pular uma placa a qualquer momento, e uma placa resolvida nunca aparece de novo naquele nível.",
+  "helpScoreBody": "Níveis mais difíceis valem mais pontos. Responder rápido e manter uma sequência dá bônus. Uma dica custa 75% dos pontos da placa. Você pode pular uma placa a qualquer momento, mas o zumbi continua de onde estava, e uma placa resolvida nunca aparece de novo naquele nível.",
   "close": "Fechar",
 
   "chooseBattle": "Escolha sua batalha",

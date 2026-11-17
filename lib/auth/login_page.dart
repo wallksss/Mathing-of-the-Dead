@@ -1,10 +1,11 @@
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../config/app_config.dart';
 import '../game/widgets/zombie_scene.dart';
 import '../l10n/generated/app_localizations.dart';
 import '../theme/app_theme.dart';
+import '../theme/legacy_theme.dart';
 import '../widgets/common.dart';
 
 /// Sign-in with e-mail/password or Google (firebase_ui_auth). Shows the group
@@ -30,21 +31,29 @@ class LoginPage extends StatelessWidget {
       ],
       // The header collapses while scrolling: scale it down and fade it out
       // so it never covers the form.
-      headerBuilder: (context, constraints, shrinkOffset) => ClipRect(
-        child: Opacity(
-          opacity: (1 - shrinkOffset / 150).clamp(0.0, 1.0),
-          child: const FittedBox(
-            fit: BoxFit.scaleDown,
-            child: _Brand(compact: true),
+      // SignInScreen is built with legacy flutter/material widgets, so every
+      // builder below wraps its content in an AppMaterialSurface.
+      headerBuilder: (context, constraints, shrinkOffset) => AppMaterialSurface(
+        child: ClipRect(
+          child: Opacity(
+            opacity: (1 - shrinkOffset / 150).clamp(0.0, 1.0),
+            child: const FittedBox(
+              fit: BoxFit.scaleDown,
+              child: _Brand(compact: true),
+            ),
           ),
         ),
       ),
-      sideBuilder: (context, constraints) => const _Brand(compact: false),
-      subtitleBuilder: (context, action) => Padding(
-        padding: const EdgeInsets.only(bottom: 8),
-        child: Text(l.tagline),
+      sideBuilder: (context, constraints) =>
+          const AppMaterialSurface(child: _Brand(compact: false)),
+      subtitleBuilder: (context, action) => AppMaterialSurface(
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: Text(l.tagline),
+        ),
       ),
-      footerBuilder: (context, action) => const _Footer(),
+      footerBuilder: (context, action) =>
+          const AppMaterialSurface(child: _Footer()),
     );
   }
 }
@@ -149,8 +158,11 @@ class _Footer extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  for (final member in AppConfig.groupMembers)
-                    Text(member, textAlign: TextAlign.center),
+                  for (final (i, member) in AppConfig.groupMembers.indexed)
+                    Text(
+                      l.groupMember(i + 1, member),
+                      textAlign: TextAlign.center,
+                    ),
                   const SizedBox(height: 8),
                   Text(
                     l.professorCredit,
