@@ -15,6 +15,50 @@ void main() {
       expect(check('3*2=3+3', Difficulty.hard).isCorrect, isTrue);
     });
 
+    test('precedence rules from the professor (17/11)', () {
+      expect(check('1+2*3=7').isCorrect, isTrue);
+      expect(check('s8!+0=1+1').isCorrect, isTrue); // (√8)! = 2! = 2
+      expect(check('2*3!=8+4').isCorrect, isTrue);
+      expect(check('-2+2=0+0').isCorrect, isTrue);
+      expect(check('--2+0!=3+0').isCorrect, isTrue);
+      expect(check('-(-2+5)=4-7').isCorrect, isTrue);
+      expect(check('s9!=6*1', Difficulty.advanced).isCorrect, isTrue);
+      expect(check('s(9!)=6*1').error!.code, MathErrorCode.notEqual);
+    });
+
+    test('factorial of huge or invalid values is a game error', () {
+      for (final e in ['(9**9**9)!=9', '(9**9**9**9)!=9', '(s(9**9**9))!=9']) {
+        expect(() => check(e), returnsNormally, reason: e);
+        expect(check(e).isCorrect, isFalse, reason: e);
+      }
+    });
+
+    test('compound expressions are accepted', () {
+      for (final e in [
+        '--(c(-(3!-s(8)))+7!!)=c(s(8!))',
+        's(s(-(2-6)!!)!)=(s8)*1!',
+        '-(-|-2|)=2*1',
+        '((((2))))=2*1',
+      ]) {
+        final code = check(e).error?.code;
+        expect(
+          code,
+          anyOf(
+            isNull,
+            MathErrorCode.notEqual,
+            MathErrorCode.factorialNegative,
+            MathErrorCode.factorialTooLarge,
+          ),
+          reason: e,
+        );
+      }
+    });
+
+    test('LaTeX keeps the root/factorial grouping', () {
+      expect(check('s9!=6*1').equation!.toLatex(), r'\sqrt{9}! = 6 \times 1');
+      expect(plateToLatex(tokensFromPlain('s(9!)=6')), r'\sqrt{9!} = 6');
+    });
+
     test('LaTeX rendering', () {
       final r = check('s(8+1)=3**1');
       expect(r.equation!.toLatex(), r'\sqrt{8 + 1} = 3^{1}');
@@ -72,7 +116,10 @@ void main() {
       expect(check('-2**2=-4').isCorrect, isTrue);
       expect(check('2**3**2=512').isCorrect, isFalse); // 512 has 3 digits
       expect(check('2**3**2=8**3').isCorrect, isTrue);
-      expect(check('s9!=s(9!)').isCorrect, isTrue);
+      // √ applies only to the number after it: √9! = (√9)! ≠ √(9!).
+      expect(check('s9!=s(9!)').isCorrect, isFalse);
+      expect(check('s9!=(s9)!').isCorrect, isTrue);
+      expect(check('-2!=-2').isCorrect, isTrue); // -(2!)
       expect(check('8-2-1=5').isCorrect, isTrue);
       expect(check('8/2/2=2').isCorrect, isTrue);
     });

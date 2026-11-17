@@ -22,13 +22,23 @@ def unary(vals, level):
         for v in out:
             new.add(-v); new.add(abs(v))
             if level in('easy','inter','adv'):
-                if v.denominator==1 and 0<=v<=10: new.add(F(math.factorial(int(v))))
+                # non-integer arguments are truncated, like the game: (√8)! = 2!
+                if 0<=v<=10: new.add(F(math.factorial(math.floor(v))))
                 if v>=0:
                     r=math.isqrt(int(v)) if v.denominator==1 else None
                     if r is not None and r*r==v: new.add(F(r))
+                    # (√v)! with an inexact root: the factorial truncates it.
+                    if v>=0:
+                        r=math.isqrt(math.floor(v))
+                        if r<=10: new.add(F(math.factorial(r)))
             if level in('easy','inter') and v.denominator==1:
                 c=round(abs(v)**(1/3)) if abs(v)<1e18 else None
                 if c is not None and c**3==abs(v): new.add(F(c if v>=0 else -c))
+                if v>=0:
+                    c=round(float(v)**(1/3))
+                    while c**3>v: c-=1
+                    while (c+1)**3<=v: c+=1
+                    if c<=10: new.add(F(math.factorial(c)))  # (∛v)!
             if level=='easy': new.add(F(math.floor(v))); new.add(F(math.ceil(v)))
         new={x for x in new if abs(x)<=LIM}
         if new<=out: break

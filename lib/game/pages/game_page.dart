@@ -250,14 +250,25 @@ class _GameViewState extends ConsumerState<_GameView> {
     final l = AppLocalizations.of(context);
     final sound = ref.read(soundServiceProvider);
     switch (event) {
-      case HitEvent(:final points):
+      case HitEvent(:final points, :final latex):
         sound.play(Sfx.shot);
         Future.delayed(
           const Duration(milliseconds: 250),
           () => sound.play(Sfx.chime),
         );
         setState(() => _deathSerial++);
-        _showBanner(l.headshot(points), good: true);
+        // A clear, unmissable confirmation: let the zombie fall, then show
+        // the solved equation until the player asks for the next zombie.
+        setState(() => _dialogOpen = true);
+        Future.delayed(const Duration(milliseconds: 700), () {
+          if (!mounted) return;
+          _withDialog(
+            () => showDialog<void>(
+              context: context,
+              builder: (context) => _HitDialog(latex: latex, points: points),
+            ),
+          );
+        });
       case MissEvent():
         sound.play(Sfx.error);
         setState(() => _shakeSerial++);
@@ -948,6 +959,46 @@ class _HintDialogState extends State<_HintDialog> {
             onPressed: () => Navigator.of(context).pop(),
             child: Text(l.close),
           ),
+      ],
+    );
+  }
+}
+
+/// Shown after a correct answer with the solved equation and the points.
+class _HitDialog extends StatelessWidget {
+  const _HitDialog({required this.latex, required this.points});
+
+  final String latex;
+  final int points;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final scheme = Theme.of(context).colorScheme;
+    return AlertDialog(
+      icon: Icon(Icons.verified_rounded, size: 48, color: scheme.primary),
+      title: Text(l.youGotIt),
+      content: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 480, minWidth: 260),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            MathView(latex, fontSize: 28),
+            const SizedBox(height: 16),
+            Text(
+              l.headshot(points),
+              style: Theme.of(context).textTheme.titleMedium
+                  ?.copyWith(color: scheme.primary),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        FilledButton(
+          autofocus: true,
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(l.nextZombie),
+        ),
       ],
     );
   }

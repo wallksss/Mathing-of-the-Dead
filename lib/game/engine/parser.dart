@@ -28,11 +28,14 @@ class CheckResult {
 /// expr     := term (('+' | '-') term)*
 /// term     := unary (('*' | '/') unary)*
 /// unary    := '-' unary | power
-/// power    := root ('**' unary)?          (right associative)
-/// root     := ('√' | '∛') root | postfix
-/// postfix  := atom '!'*
+/// power    := postfix ('**' unary)?       (right associative)
+/// postfix  := root '!'*
+/// root     := ('√' | '∛') root | atom
 /// atom     := digit | '(' expr ')' | '|' expr '|' | '⌊' expr '⌋' | '⌈' expr '⌉'
 /// ```
+/// As in the original Emplake, √ and ∛ apply only to the number (or bracketed
+/// expression) right after them and ! only to what precedes it, so
+/// √9! = (√9)! and -2! = -(2!).
 /// Two numbers next to each other without an operator are an error: the
 /// digits of the plate are never concatenated.
 class _Parser {
@@ -111,7 +114,7 @@ class _Parser {
   }
 
   Expr _power() {
-    final base = _root();
+    final base = _postfix();
     if (currentOp == Op.power) {
       final at = pos;
       pos++;
@@ -127,11 +130,11 @@ class _Parser {
       pos++;
       return Unary(kind, _root(), at: at);
     }
-    return _postfix();
+    return _atom();
   }
 
   Expr _postfix() {
-    var e = _atom();
+    var e = _root();
     while (currentOp == Op.factorial) {
       e = Unary(UnaryKind.factorial, e, at: pos);
       pos++;

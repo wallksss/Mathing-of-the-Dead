@@ -94,6 +94,53 @@ void main() {
     expect(repo.saved.single.latex, r'\sqrt{8 + 1} = 3^{1}');
   });
 
+  test('the professor\'s compound expressions can be typed', () {
+    for (final (plate, expr) in [
+      ('3878', '--(c(-(3!-s(8)))+7!!)=c(s(8!))'),
+      ('2681', 's(s(-(2-6)!!)!)=(s8)*1!'),
+    ]) {
+      startWith(plate, Difficulty.easy);
+      for (final ch in expr.split('')) {
+        c().type(ch);
+      }
+      expect(plain(s()), expr);
+    }
+  });
+
+  test('clear keeps the "=" in its starting place', () {
+    startWith('1234', Difficulty.easy);
+    for (final ch in '(1+2)!=3!*4'.split('')) {
+      c().type(ch);
+    }
+    c().clear();
+    expect(plain(s()), '12=34');
+  });
+
+  test('an operator fits between any two delimiters', () {
+    startWith('2681', Difficulty.easy);
+    for (final ch in '((2))!!=6*8*1'.split('')) {
+      c().type(ch);
+    }
+    expect(plain(s()), '((2))!!=6*8*1');
+    c().setCursor(1); // between "(" and "("
+    c().type('-');
+    expect(plain(s()), '(-(2))!!=6*8*1');
+    c().setCursor(5); // between ")" and ")"
+    c().type('!');
+    expect(plain(s()), '(-(2)!)!!=6*8*1');
+    c().setCursor(8); // between the two closing factorials
+    c().type('s');
+    expect(plain(s()), '(-(2)!)!s!=6*8*1');
+  });
+
+  test('nested |x|, ⌊x⌋ and ⌈x⌉ can be typed', () {
+    startWith('2681', Difficulty.easy);
+    for (final ch in '|-[{2}]|=6-8+1*'.split('')) {
+      c().type(ch);
+    }
+    expect(plain(s()).startsWith('|-[{2}]|'), isTrue, reason: plain(s()));
+  });
+
   test('only one "=": loading it again moves it', () {
     startWith('1234', Difficulty.hard);
     c().type('=');
@@ -195,9 +242,11 @@ void main() {
   });
 
   test('the generated lists match known plates', () {
+    // With (√n)! truncating the root, every plate has a solution at the
+    // levels that have the factorial; only Hard has impossible plates.
     expect(unsolvablePlates(Difficulty.easy), isEmpty);
-    expect(unsolvablePlates(Difficulty.intermediate), contains('7555'));
-    expect(unsolvablePlates(Difficulty.advanced), contains('1567'));
+    expect(unsolvablePlates(Difficulty.intermediate), isEmpty);
+    expect(unsolvablePlates(Difficulty.advanced), isEmpty);
     // 8131 has √(8+1) = 3**1 at Intermediate.
     expect(unsolvablePlates(Difficulty.intermediate), isNot(contains('8131')));
   });

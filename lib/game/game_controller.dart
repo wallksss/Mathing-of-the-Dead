@@ -386,8 +386,13 @@ class GameController extends Notifier<GameState?> {
   /// Sends every operator back to the belt (digits stay).
   void clear() {
     if (state == null) return;
+    // Back to the starting layout: the "=" stays, in the middle.
     final digits = _s.tokens.whereType<DigitToken>().toList();
-    _edit(digits, 0);
+    final equals = _s.tokens.whereType<OpToken>().firstWhere(
+      (t) => t.op == Op.equals,
+      orElse: () => OpToken(_id(), Op.equals),
+    );
+    _edit([digits[0], digits[1], equals, digits[2], digits[3]], 0);
   }
 
   // ------------------------------------------------------------- actions

@@ -69,8 +69,8 @@ class Solver {
 
   static int _prec(Expr e) => switch (e) {
     Num() || Bracket() => 7,
-    Unary(kind: UnaryKind.factorial) => 6,
-    Unary(kind: UnaryKind.sqrt || UnaryKind.cbrt) => 5,
+    Unary(kind: UnaryKind.sqrt || UnaryKind.cbrt) => 6,
+    Unary(kind: UnaryKind.factorial) => 5,
     Binary(kind: BinaryKind.power) => 4,
     Unary(kind: UnaryKind.negate) => 3,
     Binary(kind: BinaryKind.multiply || BinaryKind.divide) => 2,
@@ -135,20 +135,33 @@ class Solver {
         }
         if (_allows(Op.sqrt) && v > 1) {
           final r = math.sqrt(v);
+          if (!isInteger(r) && _allows(Op.factorial) && r < 13) {
+            // (√v)! truncates the inexact root, like the original: (√8)! = 2.
+            _add(
+              next,
+              Unary(UnaryKind.factorial, Unary(UnaryKind.sqrt, _atLeast(e, 6))),
+            );
+          }
           if (isInteger(r)) {
-            _add(next, Unary(UnaryKind.sqrt, _atLeast(e, 5)));
+            _add(next, Unary(UnaryKind.sqrt, _atLeast(e, 6)));
           } else if (_allows(Op.floorOpen)) {
-            final root = Unary(UnaryKind.sqrt, _atLeast(e, 5));
+            final root = Unary(UnaryKind.sqrt, _atLeast(e, 6));
             _add(next, Bracket(BracketKind.floor, root));
             _add(next, Bracket(BracketKind.ceil, root));
           }
         }
         if (_allows(Op.cbrt) && v.abs() > 1) {
           final r = math.pow(v.abs(), 1 / 3).toDouble();
+          if (!isInteger(r) && _allows(Op.factorial) && v > 0 && r < 13) {
+            _add(
+              next,
+              Unary(UnaryKind.factorial, Unary(UnaryKind.cbrt, _atLeast(e, 6))),
+            );
+          }
           if (isInteger(r)) {
-            _add(next, Unary(UnaryKind.cbrt, _atLeast(e, 5)));
+            _add(next, Unary(UnaryKind.cbrt, _atLeast(e, 6)));
           } else if (_allows(Op.floorOpen)) {
-            final root = Unary(UnaryKind.cbrt, _atLeast(e, 5));
+            final root = Unary(UnaryKind.cbrt, _atLeast(e, 6));
             _add(next, Bracket(BracketKind.floor, root));
             _add(next, Bracket(BracketKind.ceil, root));
           }

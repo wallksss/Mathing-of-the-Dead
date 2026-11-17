@@ -46,6 +46,16 @@ Prof. Walter Carnielli (os direitos do jogo original são dele).
 
 O sinal de menos unário (`-(2 - 5)`) é aceito em todos os níveis.
 
+**Precedência** (igual ao Emplake original):
+
+- `×` e `÷` vêm antes de `+` e `−`: `1 + 2 × 3 = 7`.
+- `√` e `∛` valem só para o número logo à frente, e `!` só para o que vem
+  antes: `√9! = (√9)! = 6` e `2 × 3! = 12`.
+- O `−` unário vale para o número ou expressão que o segue: `-2 + 2 = 0`,
+  `--2 = 2`.
+- Parênteses mudam a ordem: `√(9!)`, `(-2)…`.
+- O `!` de um número não inteiro usa a parte inteira: `(√8)! = 2! = 2`.
+
 - `⌊x⌋` (base) é o maior inteiro menor ou igual a `x`.
 - `⌈x⌉` (teto) é o menor inteiro maior ou igual a `x`.
 - `|x|` (módulo) é `x` se `x ≥ 0`, ou `-x` caso contrário.
@@ -62,8 +72,11 @@ O sinal de menos unário (`-(2 - 5)`) é aceito em todos os níveis.
   dos pontos da placa. Em placas muito difíceis ele pode não achar a resposta
   a tempo.
 - **Toda placa tem solução**: placas impossíveis com os operadores do nível
-  nunca aparecem. No Difícil, por exemplo, mais da metade das combinações
-  (como 0124) não tem solução e fica de fora.
+  nunca aparecem. Só o Difícil, que não tem fatorial nem raiz, tem placas
+  assim: mais da metade das combinações (como 0124) fica de fora.
+- **Acerto**: ao acertar, o zumbi cai e o jogo mostra a fórmula resolvida e
+  os pontos até você pedir o próximo zumbi.
+- **Erro**: os operadores ficam na placa para você corrigir de onde parou.
 - **Pular**: se uma placa parecer difícil demais, troque por outra. O zumbi
   continua de onde estava, então pular custa o tempo já gasto.
 - **Progresso**: as placas resolvidas ficam salvas na sua conta e nunca mais

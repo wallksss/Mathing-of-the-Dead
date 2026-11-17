@@ -75,7 +75,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get helpBuildBody =>
-      'Toque em um espaço entre os dígitos para mirar (o cursor brilhante) e depois toque nos operadores do cinto de munição. Toque em um operador da placa para removê-lo. Dígitos nunca podem ser juntados: 1 2 não é doze.';
+      'Toque em um espaço entre os dígitos para mirar (o cursor brilhante) e depois toque nos operadores do cinto de munição. Toque em um operador da placa para removê-lo. Dígitos nunca podem ser juntados: 1 2 não é doze. Precedência: × e ÷ vêm antes de + e −; √ e ∛ valem só para o número logo à frente e ! só para o que vem antes (√9! = (√9)! = 6). Use parênteses para mudar. O ! de um número não inteiro usa a parte inteira: (√8)! = 2! = 2.';
 
   @override
   String get helpKeyboardTitle => 'Teclado (typing of the dead!)';
@@ -260,6 +260,12 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get zombieGotYou => 'O zumbi te pegou!';
+
+  @override
+  String get youGotIt => 'Você acertou!';
+
+  @override
+  String get nextZombie => 'Próximo zumbi';
 
   @override
   String get possibleSolution => 'Uma solução possível:';

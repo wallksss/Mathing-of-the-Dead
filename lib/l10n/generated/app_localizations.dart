@@ -217,7 +217,7 @@ abstract class AppLocalizations {
   /// No description provided for @helpBuildBody.
   ///
   /// In en, this message translates to:
-  /// **'Tap a gap between the digits to aim (the glowing cursor), then tap the operators on the ammo belt. Tap an operator on the plate to remove it. Digits can never be joined: 1 2 is not twelve.'**
+  /// **'Tap a gap between the digits to aim (the glowing cursor), then tap the operators on the ammo belt. Tap an operator on the plate to remove it. Digits can never be joined: 1 2 is not twelve. Precedence: × and ÷ come before + and −; √ and ∛ apply only to the number right after them and ! only to what comes before it (√9! = (√9)! = 6). Use parentheses to change it. The ! of a non-integer uses its integer part: (√8)! = 2! = 2.'**
   String get helpBuildBody;
 
   /// No description provided for @helpKeyboardTitle.
@@ -513,6 +513,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The zombie got you!'**
   String get zombieGotYou;
+
+  /// No description provided for @youGotIt.
+  ///
+  /// In en, this message translates to:
+  /// **'You got it!'**
+  String get youGotIt;
+
+  /// No description provided for @nextZombie.
+  ///
+  /// In en, this message translates to:
+  /// **'Next zombie'**
+  String get nextZombie;
 
   /// No description provided for @possibleSolution.
   ///

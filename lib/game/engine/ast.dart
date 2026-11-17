@@ -190,10 +190,12 @@ final class Unary extends Expr {
             : r;
         return v < 0 ? -root : root;
       case UnaryKind.factorial:
-        if (!isInteger(v)) {
-          throw MathError(MathErrorCode.factorialNotInteger, tokenIndex: at);
+        if (!v.isFinite) {
+          throw MathError(MathErrorCode.factorialTooLarge, tokenIndex: at);
         }
-        final n = v.round();
+        // Like the original Emplake, a non-integer argument is truncated:
+        // (√8)! = 2! = 2.
+        final n = isInteger(v) ? v.round() : v.truncate();
         if (n < 0) {
           throw MathError(MathErrorCode.factorialNegative, tokenIndex: at);
         }

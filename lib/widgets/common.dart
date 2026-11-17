@@ -180,8 +180,9 @@ class MathView extends StatelessWidget {
       fontSize: fontSize,
       color: color ?? Theme.of(context).colorScheme.onSurface,
     );
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
+    // Long compound formulas shrink to fit instead of hiding off-screen.
+    return FittedBox(
+      fit: BoxFit.scaleDown,
       child: Math.tex(
         tex.isEmpty ? r'\square = \square' : tex,
         mathStyle: MathStyle.display,

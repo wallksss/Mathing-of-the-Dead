@@ -75,7 +75,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get helpBuildBody =>
-      'Tap a gap between the digits to aim (the glowing cursor), then tap the operators on the ammo belt. Tap an operator on the plate to remove it. Digits can never be joined: 1 2 is not twelve.';
+      'Tap a gap between the digits to aim (the glowing cursor), then tap the operators on the ammo belt. Tap an operator on the plate to remove it. Digits can never be joined: 1 2 is not twelve. Precedence: × and ÷ come before + and −; √ and ∛ apply only to the number right after them and ! only to what comes before it (√9! = (√9)! = 6). Use parentheses to change it. The ! of a non-integer uses its integer part: (√8)! = 2! = 2.';
 
   @override
   String get helpKeyboardTitle => 'Keyboard (typing of the dead!)';
@@ -260,6 +260,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get zombieGotYou => 'The zombie got you!';
+
+  @override
+  String get youGotIt => 'You got it!';
+
+  @override
+  String get nextZombie => 'Next zombie';
 
   @override
   String get possibleSolution => 'A possible solution:';
